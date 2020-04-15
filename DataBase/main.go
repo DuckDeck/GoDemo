@@ -90,3 +90,21 @@ func insert() {
 	}
 	fmt.Println("inser success thr id is ", res)
 }
+
+func update() {
+	sql := `update five_code set img_code = "https://www.52wubi.com/wbbmcx/tp/%E4%B8%BA.gif" where word = '为'`
+	ret, err := db.Exec(sql)
+	if err != nil {
+		fmt.Printf("sql: %s query fail :%a\n", sql, err)
+		return
+	}
+	var res int64
+	res, err = ret.RowsAffected()
+	if err != nil {
+		fmt.Printf("get insert result fail :%a\n", err)
+		return
+	}
+	fmt.Println("alter RowsAffected is ", res)
+}
+
+//delete就不需要写了
