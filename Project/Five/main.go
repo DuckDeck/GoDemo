@@ -2,10 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
+	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -13,23 +15,14 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
+var wg sync.WaitGroup
 var db *sql.DB //一个连接池
-func main() {
-	r, err := regexp.Compile("[\u4e00-\u9fa5]")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	res := r.FindAllStringSubmatch("我r你fffs", 5)
-	var keys []string
-	for _, p := range res {
-		keys = append(keys, p[0]) //拼成一个数组
-	}
+var sqlRes = make(chan fiveCode, 10)
 
-	// var s = sql.NullString{String: "123", Valid: true}
-	// fmt.Println(s)
-	checkExist(keys)
-	//initDB()
+func main() {
+
+	initDB()
+	initWebService()
 	//sendGet("他地")
 }
 func initDB() (err error) {
@@ -49,11 +42,19 @@ func initDB() (err error) {
 	return
 }
 
-func checkExist(letters []string) {
+func checkExist(letter string) (five fiveCode) {
+	var sql = "select id,word,pin_yin,five_code,img_code,img_keyboard from five_code where word = ?"
+	row := db.QueryRow(sql, letter)
 
-	for _, item := range letters {
-		fmt.Println(item)
+	err := row.Scan(&five.id, &five.word, &five.pinYin, &five.fiveCode, &five.imgCode, &five.imgKeyboard)
+	if err != nil {
+		fmt.Printf("sql: %s query fail :%a\n", sql, err)
+		return
 	}
+	sqlRes <- five //发送出去
+	wg.Done()
+	return
+
 }
 
 func sendGet(key string) {
@@ -126,4 +127,51 @@ func saveToMysql(item fiveCode) {
 
 func sendFiveCode() {
 
+}
+
+func initWebService() {
+
+	http.HandleFunc("/getfive", checkData)
+	http.ListenAndServe("0.0.0.0:9000", nil)
+}
+
+func checkData(w http.ResponseWriter, r *http.Request) {
+	param := r.URL.Query()
+	key := param.Get("key")
+	reg := regexp.MustCompile("[\u4e00-\u9fa5]")
+	res := reg.FindAllStringSubmatch(key, 20)
+	if len(res) <= 0 {
+		w.Write([]byte("你没有输入汉字"))
+		return
+	}
+	var fives []fiveCode
+	for _, p := range res {
+		wg.Add(1)
+		go checkExist(p[0])
+
+	}
+	wg.Wait()
+	var result string
+	fives = append(fives, <-sqlRes)
+	jsStr, err := json.Marshal(fives)
+	if err != nil {
+		result = createResult(-100, err.Error())
+		w.Write([]byte(result))
+		return
+	}
+	fmt.Printf("json:%s\n", jsStr)
+	defer db.Close()
+	w.Write([]byte(createResult(0, string(jsStr))))
+}
+
+func createResult(code int, str string) (res string) {
+	var result = Result{code: code, data: str}
+	data, _ := json.Marshal(result)
+	res = string(data)
+	return
+}
+
+type Result struct {
+	code int
+	data string
 }
