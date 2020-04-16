@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"regexp"
 	"strings"
-	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -15,9 +13,11 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
-var wg sync.WaitGroup
+//因为数据库也能查好几个所以不需要 这东西了， 一下子脑子不好用了
+// var wg sync.WaitGroup
+
 var db *sql.DB //一个连接池
-var sqlRes = make(chan fiveCode, 10)
+// var sqlRes = make(chan fiveCode, 10)
 
 func main() {
 
@@ -42,22 +42,39 @@ func initDB() (err error) {
 	return
 }
 
-func checkExist(letter string) (five fiveCode) {
-	var sql = "select id,word,pin_yin,five_code,img_code,img_keyboard from five_code where word = ?"
-	row := db.QueryRow(sql, letter)
-
-	err := row.Scan(&five.id, &five.word, &five.pinYin, &five.fiveCode, &five.imgCode, &five.imgKeyboard)
+func checkExist(letters []string) (fives []fiveCode, err error) {
+	var sql = "select id,word,pin_yin,five_code,img_code,img_keyboard from five_code where word in {?}"
+	rows, err := db.Query(sql, strings.Join(letters, ","))
 	if err != nil {
-		fmt.Printf("sql: %s query fail :%a\n", sql, err)
+		fmt.Println("query fail errL", err)
 		return
 	}
-	sqlRes <- five //发送出去
-	wg.Done()
+	defer rows.Close()
+	for rows.Next() {
+		var five fiveCode
+		err = rows.Scan(&five.id, &five.word, &five.pinYin, &five.fiveCode, &five.imgCode, &five.imgKeyboard)
+		if err != nil {
+			fmt.Println("scan fail", err)
+			return
+		}
+		fives = append(fives, five)
+	}
+	if len(fives) == len(letters) {
+		return
+	}
+	var arrRemaind []string
+	for _, a := range letters {
+		for _, b := range fives {
+			if b.word != a {
+				arrRemaind = append(arrRemaind, a)
+			}
+		}
+	}
+	fives, err = sendGet(strings.Join(arrRemaind, ","))
 	return
-
 }
 
-func sendGet(key string) {
+func sendGet(key string) (fives []fiveCode, err error) {
 	client := &http.Client{}
 	encoder := simplifiedchinese.GB18030.NewEncoder()
 	newKey, _ := encoder.String(key)
@@ -96,10 +113,11 @@ func sendGet(key string) {
 		d := k.Next().Next().Next().Children().First().AttrOr("src", "")
 		d = "https://www.52wubi.com/wbbmcx/" + d
 		fmt.Println(a, b, c, d)
-		var item = fiveCode{word: a, pinYin: b, fiveCode: c, imgCode: sql.NullString{String: d, Valid: true}}
+		var item = fiveCode{word: a, pinYin: b, fiveCode: c, imgCode: d}
+		fives = append(fives, item)
 		saveToMysql(item)
 	})
-
+	return
 }
 
 type fiveCode struct {
@@ -107,8 +125,8 @@ type fiveCode struct {
 	word        string
 	pinYin      string
 	fiveCode    string
-	imgCode     sql.NullString
-	imgKeyboard sql.NullString
+	imgCode     string
+	imgKeyboard string
 }
 
 func saveToMysql(item fiveCode) {
@@ -130,38 +148,38 @@ func sendFiveCode() {
 }
 
 func initWebService() {
-
 	http.HandleFunc("/getfive", checkData)
 	http.ListenAndServe("0.0.0.0:9000", nil)
 }
 
 func checkData(w http.ResponseWriter, r *http.Request) {
-	param := r.URL.Query()
-	key := param.Get("key")
-	reg := regexp.MustCompile("[\u4e00-\u9fa5]")
-	res := reg.FindAllStringSubmatch(key, 20)
-	if len(res) <= 0 {
-		w.Write([]byte("你没有输入汉字"))
-		return
-	}
-	var fives []fiveCode
-	for _, p := range res {
-		wg.Add(1)
-		go checkExist(p[0])
+	// param := r.URL.Query()
+	// key := param.Get("key")
+	// reg := regexp.MustCompile("[\u4e00-\u9fa5]")
+	// res := reg.FindAllStringSubmatch(key, 20)
+	// if len(res) <= 0 {
+	// 	w.Write([]byte("你没有输入汉字"))
+	// 	return
+	// }
 
-	}
-	wg.Wait()
-	var result string
-	fives = append(fives, <-sqlRes)
-	jsStr, err := json.Marshal(fives)
-	if err != nil {
-		result = createResult(-100, err.Error())
-		w.Write([]byte(result))
-		return
-	}
-	fmt.Printf("json:%s\n", jsStr)
-	defer db.Close()
-	w.Write([]byte(createResult(0, string(jsStr))))
+	// var arrLetters []string
+	// for _, p := range res {
+	// 	arrLetters = append(arrLetters, p[0])
+	// }
+	// var result string
+	// fives, err := checkExist(arrLetters)
+	// if err != nil {
+	// 	result = createResult(-100, err.Error())
+	// 	w.Write([]byte(result))
+	// 	return
+	// }
+
+	// jsStr, _ := json.Marshal(fives)
+	// fmt.Printf("json:%s\n", jsStr)
+	// defer db.Close()
+	// w.Write([]byte(createResult(0, string(jsStr))))
+	w.Write([]byte(createResult(0, string("fail"))))
+
 }
 
 func createResult(code int, str string) (res string) {
@@ -174,4 +192,17 @@ func createResult(code int, str string) (res string) {
 type Result struct {
 	code int
 	data string
+}
+
+func removeItem(arr []string, item string) []string {
+	var index = 0
+	for i, s := range arr {
+		if s == item {
+			index = i
+		}
+	}
+	//会改变自己，所以要用copy
+	tmp := make([]string, len(arr), len(arr))
+	copy(tmp, arr)
+	return append(tmp[:index], tmp[(index+1):]...)
 }
