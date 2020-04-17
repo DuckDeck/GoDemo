@@ -8,9 +8,8 @@ import (
 	"regexp"
 	"strings"
 
-	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/PuerkitoBio/goquery"
+	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
