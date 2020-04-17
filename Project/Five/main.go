@@ -162,7 +162,7 @@ func checkData(w http.ResponseWriter, r *http.Request) {
 	reg := regexp.MustCompile("[\u4e00-\u9fa5]")
 	res := reg.FindAllStringSubmatch(key, 20)
 	if len(res) <= 0 {
-		w.Write([]byte("你没有输入汉字"))
+		w.Write([]byte(createResult(0, "你没有输入汉字")))
 		return
 	}
 
