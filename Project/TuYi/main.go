@@ -23,10 +23,12 @@ var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 func main() {
 
 	initDB()
-	getImgCat("http://www.tuyi8.vip/thread-26093-1-1.html")
-	return
-	var baseUrl = "http://www.tuyi8.vip/forum-14-"
-	res, err := http.Get(baseUrl + "1.html")
+	getImgMain("http://www.tuyi8.vip/forum-17-", 13)
+
+}
+
+func getImgMain(baseUrl string, startIndex int) {
+	res, err := http.Get(baseUrl + strconv.Itoa(startIndex) + ".html")
 	if err != nil {
 		fmt.Println("request fail", err)
 		return
@@ -37,7 +39,8 @@ func main() {
 		fmt.Println("解析HTML失败", err)
 		return
 	}
-	pages := doc.Find("div.pg").First().Children().Length() - 2
+	pages := doc.Find("div.pg").First().Children().Length() + startIndex - 2
+	fmt.Println("一共有多少页", pages)
 	var arrCatImgs []string
 	s := doc.Find("div.bus_vtem")
 	s.Each(func(i int, s *goquery.Selection) { //获取节点集合并遍历
@@ -47,7 +50,7 @@ func main() {
 		}
 
 	})
-	for i := 1; i < pages; i++ {
+	for i := startIndex + 1; i < pages; i++ {
 		res, err := http.Get(baseUrl + strconv.Itoa(i) + ".html")
 		if err != nil {
 			fmt.Println("request fail", err)
@@ -66,7 +69,6 @@ func main() {
 			if exist {
 				arrCatImgs = append(arrCatImgs, href)
 			}
-
 		})
 	}
 	for _, img := range arrCatImgs {
@@ -89,7 +91,11 @@ func getImgCat(url string) {
 
 	title := doc.Find("#thread_subject").Text()
 	cat, _ := doc.Find("a.bus_fl").Children().First().Attr("alt")
-
+	mainImage, _ := doc.Find("ignore_js_op").First().Children().First().Attr("data-original")
+	info, err := doc.Find("td.t_f").First().Children().Html()
+	if err != nil {
+		info = "无"
+	}
 	s := doc.Find(".savephotop")
 	var arrImgs []string
 	s.Each(func(i int, s *goquery.Selection) { //获取节点集合并遍历
@@ -98,12 +104,15 @@ func getImgCat(url string) {
 			arrImgs = append(arrImgs, img)
 		}
 	})
-
-	var tu = TuYi{urlStr: url, title: title, cat: cat, imgs: arrImgs}
+	if len(arrImgs) <= 0 {
+		return
+	}
+	var tu = TuYi{urlStr: url, title: title, cat: cat, imgs: arrImgs, mainImage: mainImage, personInfo: info}
 	saveToMysql(tu)
-	var catImgPath = path.Join(imgPath, title)
+	var catImgPath = path.Join(imgPath, cat, title)
 
-	os.Mkdir(catImgPath, os.ModePerm)
+	os.MkdirAll(catImgPath, os.ModePerm)
+	getImg(tu.mainImage, catImgPath)
 	for _, img := range arrImgs {
 		getImg(img, catImgPath)
 	}
@@ -130,8 +139,7 @@ func getImg(img string, imgPath string) {
 }
 
 func saveToMysql(tu TuYi) {
-	return
-	sql := `insert into beautiful(title,url,cat,imgs) values(?,?,?,?)`
+	sql := `insert into beautiful(title,person_info,main_img,url,cat,imgs) values(?,?,?,?,?,?)`
 	stmt, err := db.Prepare(sql)
 	if err != nil {
 		fmt.Printf("sql: %s prepare fail :%a\n", sql, err)
@@ -139,7 +147,7 @@ func saveToMysql(tu TuYi) {
 	}
 	defer stmt.Close()
 	//后续只要用到stmp
-	res, err := stmt.Exec(tu.title, tu.urlStr, tu.cat, strings.Join(tu.imgs, "-"))
+	res, err := stmt.Exec(tu.title, tu.personInfo, tu.mainImage, tu.urlStr, tu.cat, strings.Join(tu.imgs, "-"))
 	if err != nil {
 		fmt.Printf("sql: %s exec fail :%s\n", sql, err.Error())
 		return
@@ -171,8 +179,10 @@ func initDB() (err error) {
 }
 
 type TuYi struct {
-	urlStr string
-	title  string
-	cat    string
-	imgs   []string
+	urlStr     string
+	title      string
+	mainImage  string
+	personInfo string
+	cat        string
+	imgs       []string
 }
