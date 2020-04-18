@@ -8,19 +8,23 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
 var db *sql.DB //一个连接池
-var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi"
+var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 
 func main() {
-	initDB()
 
+	initDB()
+	getImgCat("http://www.tuyi8.vip/thread-26093-1-1.html")
+	return
 	var baseUrl = "http://www.tuyi8.vip/forum-14-"
 	res, err := http.Get(baseUrl + "1.html")
 	if err != nil {
@@ -65,7 +69,9 @@ func main() {
 
 		})
 	}
-	fmt.Println(arrCatImgs)
+	for _, img := range arrCatImgs {
+		getImgCat(img)
+	}
 }
 
 func getImgCat(url string) {
@@ -95,12 +101,15 @@ func getImgCat(url string) {
 
 	var tu = TuYi{urlStr: url, title: title, cat: cat, imgs: arrImgs}
 	saveToMysql(tu)
+	var catImgPath = path.Join(imgPath, title)
+
+	os.Mkdir(catImgPath, os.ModePerm)
 	for _, img := range arrImgs {
-		getImg(img)
+		getImg(img, catImgPath)
 	}
 }
 
-func getImg(img string, title string) {
+func getImg(img string, imgPath string) {
 	fileName := path.Base(img)
 	res, err := http.Get(img)
 	if err != nil {
@@ -110,7 +119,7 @@ func getImg(img string, title string) {
 	defer res.Body.Close()
 	reader := bufio.NewReaderSize(res.Body, 64*1024)
 
-	file, err := os.Create(imgPath + fileName)
+	file, err := os.Create(filepath.Join(imgPath, fileName))
 	if err != nil {
 		panic(err)
 	}
@@ -121,6 +130,7 @@ func getImg(img string, title string) {
 }
 
 func saveToMysql(tu TuYi) {
+	return
 	sql := `insert into beautiful(title,url,cat,imgs) values(?,?,?,?)`
 	stmt, err := db.Prepare(sql)
 	if err != nil {

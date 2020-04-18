@@ -1,0 +1,9 @@
+Executing:
+CREATE TABLE `Five`.`five_code` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `word` VARCHAR(40) NOT NULL,
+  `pin_yin` VARCHAR(45) NOT NULL,
+  `five_code` VARCHAR(45) NOT NULL,
+  `img_code` VARCHAR(145) NOT NULL,
+  `img_keyboard` VARCHAR(145) NOT NULL,
+  PRIMARY KEY (`id`)) CHARSET=utf8mb4;
