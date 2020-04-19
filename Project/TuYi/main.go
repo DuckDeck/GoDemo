@@ -23,7 +23,7 @@ var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 func main() {
 
 	initDB()
-	getImgMain("http://www.tuyi8.vip/forum-17-", 25)
+	getImgMain("http://www.tuyi8.vip/forum-17-", 29)
 
 }
 
@@ -40,7 +40,6 @@ func getImgMain(baseUrl string, startIndex int) {
 		return
 	}
 	pages := doc.Find("div.pg").First().Children().Length() + startIndex - 2
-	pages = 1
 	fmt.Println("一共有多少页", pages)
 	var arrCatImgs []string
 	s := doc.Find("div.bus_vtem")
@@ -121,13 +120,16 @@ func getImgCat(url string) {
 
 func getImg(img string, imgPath string) {
 	fileName := path.Base(img)
-	res, err := http.Get(img)
+	c := &http.Client{
+		Timeout: 0,
+	}
+	res, err := c.Get(img)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer res.Body.Close()
-	reader := bufio.NewReaderSize(res.Body, 64*1024)
+	reader := bufio.NewReaderSize(res.Body, 128*1024)
 
 	file, err := os.Create(filepath.Join(imgPath, fileName))
 	if err != nil {

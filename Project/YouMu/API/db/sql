@@ -1,0 +1,30 @@
+Executing:
+CREATE TABLE `YouMu`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `login_name` VARCHAR(64) NULL,
+  `passowrd` TEXT(100) NULL,
+  PRIMARY KEY (`id`));
+
+
+CREATE TABLE `YouMu`.`video_info` (
+  `id` VARCHAR(64) NOT NULL,
+  'author_id' INT NULL,
+  `name` VARCHAR(64) NULL,
+  'display_ctime' TEXT(50) NULL,
+  `create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `YouMu`.`comments` (
+  `id` VARCHAR(64) NOT NULL,
+  `video_id` VARCHAR(64) NULL DEFAULT '123',
+  `author_id` INT NULL,
+  `content` TEXT(500) NULL,
+  `time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `YouMu`.`sessions` (
+  `session_id` VARCHAR(64) NOT NULL,
+  `TTL` TINYTEXT NULL,
+  `login_name` VARCHAR(64) NULL,
+  PRIMARY KEY (`session_id`));
+
