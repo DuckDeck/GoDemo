@@ -1,14 +1,22 @@
 package db
 
-import "log"
+import (
+	"database/sql"
+	"log"
+	"socket/Project/YouMu/API/defs"
+
+)
 
 func addUserCredential(name string, password string) error {
 	stmt, err := db.Prepare("insert into user(login_name,password) values (?,?)")
 	if err != nil {
 		return err
 	}
-	stmt.Exec(name, password)
-	stmt.Close()
+	_, err = stmt.Exec(name, password)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
 	return nil
 }
 
@@ -19,8 +27,11 @@ func getUserCredential(name string) (string, error) {
 		return "", err
 	}
 	var password string
-	stmt.QueryRow(name).Scan(&password)
-	stmt.Close()
+	err = stmt.QueryRow(name).Scan(&password)
+	if err != nil && err != sql.ErrNoRows {
+		return "", err
+	}
+	defer stmt.Close()
 	return password, nil
 }
 
@@ -30,7 +41,16 @@ func deleteUser(name string, password string) error {
 		log.Printf("%s", err)
 		return err
 	}
-	stmt.Exec(name, password)
-	stmt.Close()
+	_, err = stmt.Exec(name, password)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
 	return nil
+}
+
+func addNewVideo(aid int, name string) (*defs.VideoInfo error)) {
+	var uuid =  uuid.Must(uuid.NewV4()).String()
+	t := time.now()
+	
 }
