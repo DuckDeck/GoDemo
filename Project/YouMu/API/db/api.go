@@ -52,5 +52,4 @@ func deleteUser(name string, password string) error {
 func addNewVideo(aid int, name string) (*defs.VideoInfo error)) {
 	var uuid =  uuid.Must(uuid.NewV4()).String()
 	t := time.now()
-	
 }
