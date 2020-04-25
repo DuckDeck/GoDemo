@@ -23,8 +23,8 @@ var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 func main() {
 
 	initDB()
-	getImgMain("http://www.tuyi8.vip/forum-335-", 2)
-
+	getImgMain("http://www.tuyi8.vip/forum-335-", 7)
+	//getImgCat("http://www.tuyi8.vip/forum.php?mod=viewthread&tid=6492")
 }
 
 func getImgMain(baseUrl string, startIndex int) {
