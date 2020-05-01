@@ -36,25 +36,46 @@ func startServer() {
 	})
 	r.Run(":8889")
 }
-func initDB() {
-	db, err := gorm.Open("mysql", "root:Stanhu520.@tcp(127.0.0.1:3306)/mall")
+
+var db *gorm.DB
+
+func initDB() (err error) {
+	db, err = gorm.Open("mysql", "root:Stanhu520.@tcp(127.0.0.1:3306)/mall")
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
-	db.SingularTable(true) //默认新建表都会用复数形式，使用这个来让表使用单数形式
+	db.SingularTable(true)
+	return
+	//默认新建表都会用复数形式，使用这个来让表使用单数形式
 	//db.AutoMigrate(&User{})
 
 	//db.Table("test_table").CreateTable(&testTable{}) //一般只用一次
-	t := testTable{Age: 11, Name: "avc"}
-	fmt.Println(db.NewRecord(&t)) //对于一个对象来，如果本身被用于db.create了，
+	//t := testTable{Age: 11, Name: "avc"}
+	//fmt.Println(db.NewRecord(&t)) //对于一个对象来，如果本身被用于db.create了，
 	//那么就相当于被使用了，所以就已经存在了，不过如果重新再跑一次，前面的内存清空了，这就是一个新的，这样的话可以再存进数据库一次
-	db.Create(&t)
-	fmt.Println(db.NewRecord(&t))
+	//db.Create(&t)
+	//fmt.Println(db.NewRecord(&t))
 }
 func main() {
 	//startServer()
-	initDB()
+	_ = initDB()
+	//insert()
+	var t testTable
+	db.Take(&t) //不知道 为什么全是0
+	fmt.Printf("test:%#v\n", t.Age)
+
+	var tests []testTable
+	db.Debug().Find(&tests)
+	fmt.Printf("test:%#v\n", tests)
+
+	defer db.Close()
+}
+
+func insert() {
+	t := testTable{Age: 55, Name: "zzz"}
+	db.Create(&t)
+	t = testTable{Age: 14, Name: "aaa"}
+	db.Create(&t)
 }
 
 type testTable struct { //要用gorm建表的话一定要加上gorm.Model而且字段名要大写
