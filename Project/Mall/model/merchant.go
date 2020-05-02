@@ -1,12 +1,12 @@
 package model
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
 )
 
 type Merchant struct {
-	gin.Model
+	gorm.Model
 	UUID   uuid.UUID `json:"uuid"`
 	Logo   string
 	Poster string

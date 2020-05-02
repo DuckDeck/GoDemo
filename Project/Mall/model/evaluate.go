@@ -1,11 +1,13 @@
 package model
 
 import (
-	"github.com/gin-gonic/gin"
+	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type ShopEvaluate struct {
-	gin.Model
+	gorm.Model
 	EvaluateType int
 	Poster       string
 	Name         string
@@ -13,11 +15,12 @@ type ShopEvaluate struct {
 }
 
 type UnitEvaluate struct {
-	gin.Model
+	gorm.Model
 	UnitId   int
 	SenderID int
-	Time     time
-	Comment  string
-	value    int
-	UnitSku  Sku
+
+	Time    time.Time
+	Comment string
+	value   int
+	UnitSku Sku
 }

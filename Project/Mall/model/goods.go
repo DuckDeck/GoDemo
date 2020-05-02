@@ -1,9 +1,9 @@
 package model
 
-import "github.com/gin-gonic/gin"
+import "github.com/jinzhu/gorm"
 
 type Goods struct {
-	gin.Model
+	gorm.Model
 	Images     []string
 	UnitTitle  string
 	UnitSku    []Sku
@@ -13,7 +13,7 @@ type Goods struct {
 }
 
 type Sku struct {
-	gin.Model
+	gorm.Model
 	UnitID int
 	Size   string
 	Color  string

@@ -1,9 +1,9 @@
 package model
 
-import "github.com/gin-gonic/gin"
+import "github.com/jinzhu/gorm"
 
 type Keyword struct {
-	gin.Model
+	gorm.Model
 	Word  string `json:"word"`
 	Link  string `json:"link"`
 	Sort  int    `json:"sort"`
