@@ -9,6 +9,5 @@ import (
 func main() {
 	initialize.Mysql()
 	defer global.G_DB.Close()
-
 	core.RunServer()
 }

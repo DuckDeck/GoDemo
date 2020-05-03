@@ -7,9 +7,9 @@ import (
 )
 
 type Server struct {
-	Mysql Mysql `mapstructure:"mysql" json:"mysql"`
-
-	Log Log `mapstructure:"log" json:"log"`
+	Mysql  Mysql  `mapstructure:"mysql" json:"mysql"`
+	System System `mapstructure:"system" json:"system"`
+	Log    Log    `mapstructure:"log" json:"log"`
 }
 type Mysql struct {
 	Username     string `mapstructure:"username" json:"username"`
@@ -20,6 +20,12 @@ type Mysql struct {
 	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"maxIdleConns"`
 	MaxOpenConns int    `mapstructure:"max-open-conns" json:"maxOpenConns"`
 	LogMode      bool   `mapstructure:"log-mode" json:"logMode"`
+}
+type System struct {
+	UseMultipoint bool   `mapstructure:"use-multipoint" json:"useMultipoint"`
+	Env           string `mapstructure:"env" json:"env"`
+	Addr          int    `mapstructure:"addr" json:"addr"`
+	DbType        string `mapstructure:"db-type" json:"dbType"`
 }
 type Log struct {
 	Prefix  string `mapstructure:"prefix" json:"prefix"`

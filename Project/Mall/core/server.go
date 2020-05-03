@@ -1,7 +1,26 @@
 package core
 
-import "fmt"
+import (
+	"GoDemo/Project/Mall/global"
+	"GoDemo/Project/Mall/initialize"
+	"fmt"
+	"net/http"
+
+	"time"
+)
 
 func RunServer() {
-	fmt.Println("123")
+	Router := initialize.Routers()
+
+	address := fmt.Sprintf(":%d", global.G_CONFIG.System.Addr)
+
+	s := &http.Server{
+		Addr:           address,
+		Handler:        Router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	time.Sleep(10 * time.Microsecond)
+	global.G_LOG.Error(s.ListenAndServe())
 }
