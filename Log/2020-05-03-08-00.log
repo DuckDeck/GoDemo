@@ -1,3 +1,16 @@
 [GIN-VUE-ADMIN]2020/05/03 - 17:16:03.655 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:15 ▶ [DEBUG] use middleware cors
 [GIN-VUE-ADMIN]2020/05/03 - 17:16:03.656 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:18 ▶ [DEBUG] router register success
 [GIN-VUE-ADMIN]2020/05/03 - 17:16:03.657 /Users/stan/Desktop/Project/GoDemo/Project/Mall/core/server.go:25 ▶ [ERROR] listen tcp :8888: bind: address already in use
+[GIN-VUE-ADMIN]2020/05/03 - 17:25:30.945 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:15 ▶ [DEBUG] use middleware cors
+[GIN-VUE-ADMIN]2020/05/03 - 17:25:30.946 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:18 ▶ [DEBUG] router register success
+[GIN-VUE-ADMIN]2020/05/03 - 17:25:30.946 /Users/stan/Desktop/Project/GoDemo/Project/Mall/core/server.go:25 ▶ [ERROR] listen tcp :8888: bind: address already in use
+[GIN-VUE-ADMIN]2020/05/03 - 17:26:12.492 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:15 ▶ [DEBUG] use middleware cors
+[GIN-VUE-ADMIN]2020/05/03 - 17:26:12.492 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:18 ▶ [DEBUG] router register success
+[GIN-VUE-ADMIN]2020/05/03 - 17:27:16.727 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:15 ▶ [DEBUG] use middleware cors
+[GIN-VUE-ADMIN]2020/05/03 - 17:27:16.728 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:18 ▶ [DEBUG] router register success
+[GIN-VUE-ADMIN]2020/05/03 - 18:09:11.997 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/tables.go:12 ▶ [DEBUG] register table success
+[GIN-VUE-ADMIN]2020/05/03 - 18:09:11.998 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:15 ▶ [DEBUG] use middleware cors
+[GIN-VUE-ADMIN]2020/05/03 - 18:09:11.998 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:18 ▶ [DEBUG] router register success
+[GIN-VUE-ADMIN]2020/05/03 - 18:38:05.096 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/tables.go:12 ▶ [DEBUG] register table success
+[GIN-VUE-ADMIN]2020/05/03 - 18:38:05.097 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:15 ▶ [DEBUG] use middleware cors
+[GIN-VUE-ADMIN]2020/05/03 - 18:38:05.097 /Users/stan/Desktop/Project/GoDemo/Project/Mall/initialize/router.go:18 ▶ [DEBUG] router register success

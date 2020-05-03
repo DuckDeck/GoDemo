@@ -1,6 +1,10 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"GoDemo/Project/Mall/global"
+
+	"github.com/jinzhu/gorm"
+)
 
 type Banner struct {
 	gorm.Model
@@ -10,4 +14,10 @@ type Banner struct {
 	Height uint   `json:"height"`
 	Wight  uint   `json:"wight"`
 	Link   string `json:"link"`
+}
+
+func GetTopBanner(top int) (banners []Banner, err error) {
+
+	global.G_DB.Find(&banners)
+	return
 }
