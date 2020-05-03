@@ -18,9 +18,8 @@ type UnitEvaluate struct {
 	gorm.Model
 	UnitId   int
 	SenderID int
-
-	Time    time.Time
-	Comment string
-	value   int
-	UnitSku Sku
+	Time     time.Time
+	Comment  string
+	value    int
+	UnitSku  Sku
 }
