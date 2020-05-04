@@ -23,7 +23,7 @@ var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 func main() {
 
 	initDB()
-	getImgMain("http://www.tuyi8.vip/forum-15-", 1)
+	getImgMain("http://www.tuyi8.vip/forum-16-", 1)
 	//getImgCat("http://www.tuyi8.vip/forum.php?mod=viewthread&tid=6492")
 }
 
@@ -40,7 +40,7 @@ func getImgMain(baseUrl string, startIndex int) {
 		return
 	}
 	pages := doc.Find("div.pg").First().Children().Length() + startIndex - 2
-	pages = 0
+
 	fmt.Println("一共有多少页", pages)
 	var arrCatImgs []string
 	s := doc.Find("div.bus_vtem")
