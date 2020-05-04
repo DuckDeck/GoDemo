@@ -23,12 +23,21 @@ var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 func main() {
 
 	initDB()
-	getImgMain("http://www.tuyi8.vip/forum-16-", 1)
-	//getImgCat("http://www.tuyi8.vip/forum.php?mod=viewthread&tid=6492")
+	//getImgMain("http://www.tuyi8.vip/forum-16-", 13)
+	//getImgMain("http://www.tuyi8.vip/forum-16-14.html?btwaf=34109039", -1)
+	getImgCat("http://www.tuyi8.vip/thread-8693-1-10.html")
 }
 
 func getImgMain(baseUrl string, startIndex int) {
-	res, err := http.Get(baseUrl + strconv.Itoa(startIndex) + ".html")
+	var url string
+	if startIndex < 0 {
+		url = baseUrl
+	} else {
+		url = baseUrl + strconv.Itoa(startIndex) + ".html"
+	}
+
+	fmt.Println(url)
+	res, err := http.Get(url)
 	if err != nil {
 		fmt.Println("request fail", err)
 		return
@@ -39,8 +48,9 @@ func getImgMain(baseUrl string, startIndex int) {
 		fmt.Println("解析HTML失败", err)
 		return
 	}
+	fmt.Println(doc.Html())
 	pages := doc.Find("div.pg").First().Children().Length() + startIndex - 2
-
+	pages = startIndex + 1
 	fmt.Println("一共有多少页", pages)
 	var arrCatImgs []string
 	s := doc.Find("div.bus_vtem")
