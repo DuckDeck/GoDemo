@@ -8,7 +8,10 @@ import (
 func DBTables() {
 	db := global.G_DB
 	db.SingularTable(true)
-	db.AutoMigrate(model.Banner{})
+	if !db.HasTable(&model.Banner{}) { //检查存在不存在，其实这个不用判断也行，不会重复建表的
+		db.AutoMigrate(model.Banner{})
+	}
+
 	db.AutoMigrate(model.Recommend{})
 	global.G_LOG.Debug("register table success")
 }
