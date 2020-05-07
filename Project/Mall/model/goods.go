@@ -1,6 +1,7 @@
 package model
 
 import (
+	"GoDemo/Project/Mall/global"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -70,4 +71,9 @@ type UnitSize struct {
 	XL   float32
 	XXL  float32
 	XXXL float32
+}
+
+func GetCats(cat int) (goodsCats []GoodsCat, err error) {
+	global.G_DB.Where("pid = ?", cat).Find(&goodsCats)
+	return
 }
