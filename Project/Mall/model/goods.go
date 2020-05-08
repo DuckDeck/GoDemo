@@ -9,17 +9,21 @@ import (
 
 type Goods struct {
 	gorm.Model
-	ShopID string //商家ID
-	UnitID int    //商品编码 生成方法  分类加标题hash
+
+	UnitID int //商品编码 生成方法  分类加标题hash
 
 	UnitTitle  string    //商品标题
 	SaleDesc   string    //销售信息
-	SalNum     uint      //销售数量
-	CollectNum uint      //收藏数
-	CheckNum   uint      //点击数
-	Stratus    int       //	状态
+	SalNum     int       //销售数量
+	CollectNum int       //收藏数
+	CheckNum   int       //点击数
+	Status     int       //	状态   1上架 2 下架
 	Keyword    string    //关键字
 	CreateTime time.Time // 创建时间
+	Price      float64
+	OrgPrice   float64
+	Link       string //链接到原先的地方
+	MainImage  string
 	//one to one
 	GoodDesc GoodDesc
 	//one to Many
@@ -49,6 +53,7 @@ type GoodsCat struct {
 	Name     string // 名称
 	FullPath string // 全路径
 	Level    int    // 分类等级
+	Logo     string // 图标
 }
 
 type Sku struct {

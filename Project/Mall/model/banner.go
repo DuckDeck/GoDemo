@@ -11,8 +11,8 @@ type Banner struct {
 
 	Title  string `json:"title"`
 	Img    string `json:"img"`
-	Height uint   `json:"height"`
-	Wight  uint   `json:"wight"`
+	Height int    `json:"height"`
+	Wight  int    `json:"wight"`
 	Link   string `json:"link"`
 }
 

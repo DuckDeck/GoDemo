@@ -30,3 +30,7 @@ func getGoodCats(c *gin.Context) {
 	var res = model.Result{Code: 0, Count: 0, Msg: "success", Data: cat}
 	c.JSON(http.StatusOK, res)
 }
+
+func addCat(pid int, catName string, sort int) {
+
+}
