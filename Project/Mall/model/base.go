@@ -1,10 +1,11 @@
 package model
 
 type Result struct {
-	Code  int         `json:"code"`
-	Msg   string      `json:"msg"`
-	Count int         `json:"count"`
-	Data  interface{} `json:"data"`
+	Code     int         `json:"code"`
+	Msg      string      `json:"msg"`
+	MsgDebug string      `json:"MsgDebug"` //用于debug模式
+	Count    int         `json:"count"`
+	Data     interface{} `json:"data"`
 }
 
 //错误码

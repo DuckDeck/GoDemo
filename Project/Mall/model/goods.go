@@ -27,6 +27,8 @@ type Goods struct {
 
 	GoodsCat   GoodsCat
 	GoodsCatID int
+	Merchant   Merchant
+	MerchantID int
 }
 
 //对于商品的图文，视频 等专门用表来记录

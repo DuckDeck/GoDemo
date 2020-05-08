@@ -17,5 +17,10 @@ func DBTables() {
 	db.AutoMigrate(model.GoodsCat{})
 	db.AutoMigrate(model.GoodDesc{})
 	db.AutoMigrate(model.Sku{})
+	db.AutoMigrate(model.Merchant{})
 	global.G_LOG.Debug("register table success")
+}
+
+func addGoodsCat() {
+
 }

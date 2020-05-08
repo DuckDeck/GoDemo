@@ -24,6 +24,6 @@ func initMainRouter(Router *gin.RouterGroup) {
 	//.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
 		UserRouter.GET("/", api.Main) // 修改密码
-		UserRouter.GET("/list", api.Main)
+		UserRouter.GET("/list/:tpye/:pageindex/:pagesize", api.Main)
 	}
 }

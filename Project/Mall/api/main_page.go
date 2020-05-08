@@ -2,6 +2,7 @@ package api
 
 import (
 	"GoDemo/Project/Mall/model"
+	"GoDemo/Project/Mall/tool"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,5 +23,18 @@ func Main(c *gin.Context) {
 }
 
 func List(c *gin.Context) {
+	var res = tool.CheckNum(c, "type")
+	if res.Code != 0 {
+		c.JSON(http.StatusOK, res)
+		return
+	}
+	res = tool.CheckPage(c)
+	if res.Code != 0 {
+		c.JSON(http.StatusOK, res)
+		return
+	}
+	// var type = c.GetInt("type")
+	// var pageIndex = c.GetInt("pageindex")
+	// var pageSize = c.GetInt("pagesize")
 
 }
