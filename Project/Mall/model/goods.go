@@ -47,13 +47,15 @@ type GoodDesc struct {
 
 //商品分类
 type GoodsCat struct {
-	ID       int    //ID
+	ID       int //ID
+	SubCatID int
 	PID      int    //上级分类ID
 	Sort     int    // 排序
 	Name     string // 名称
 	FullPath string // 全路径
 	Level    int    // 分类等级
 	Logo     string // 图标
+	Link     string
 }
 
 type Sku struct {

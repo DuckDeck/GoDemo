@@ -198,16 +198,19 @@ func FillGoods() {
 func FillCat() {
 	res, err := http.Get("http://123.207.32.32:8000/api/m3/category")
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 	js, err := simplejson.NewJson(body)
-	banners, err := js.Get("data").Get("list").Array()
+	banners, err := js.Get("data").Get("category").Get("list").Array()
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 	var db = global.G_DB
@@ -218,8 +221,53 @@ func FillCat() {
 			if t, ok := each_map["title"].(string); ok {
 				item.Name = t
 			}
+			if t, ok := each_map["maitKey"].(string); ok {
+				id, _ := strconv.Atoi(t)
+				item.SubCatID = id
+			}
 		}
 		item.FullPath = item.Name
+		fmt.Println(item)
+		db.Create(&item)
+	}
+}
+
+func GetSubID(id int) {
+	res, err := http.Get("http://123.207.32.32:8000/api/m3/subcategory?maitKey=" + strconv.Itoa(id))
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	js, err := simplejson.NewJson(body)
+	banners, err := js.Get("data").Get("list").Array()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	var title, _ = js.Get("data").Get("info").Get("title").String()
+	var db = global.G_DB
+	for k, v := range banners {
+		var item = model.GoodsCat{PID: id, Level: 2}
+		item.Sort = k
+		if each_map, ok := v.(map[string]interface{}); ok {
+			if t, ok := each_map["title"].(string); ok {
+				item.Name = t
+			}
+			if t, ok := each_map["link"].(string); ok {
+				item.Link = t
+			}
+			if t, ok := each_map["image"].(string); ok {
+				item.Logo = t
+			}
+		}
+		item.FullPath = title + "_" + item.Name
+		fmt.Println(item)
 		db.Create(&item)
 	}
 }

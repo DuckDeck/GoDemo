@@ -25,7 +25,7 @@ func main() {
 	initDB()
 	//getImgMain("http://www.tuyi8.vip/forum-16-", 13)
 	//getImgMain("http://www.tuyi8.vip/forum-16-14.html?btwaf=34109039", -1)
-	getImgCat("http://www.tuyi8.vip/thread-8693-1-10.html")
+	getImgCat("http://www.tuyi8.vip/thread-26900-1-1.html")
 }
 
 func getImgMain(baseUrl string, startIndex int) {
@@ -97,6 +97,15 @@ func getImgCat(url string) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		fmt.Println("解析HTML失败", err)
+		return
+	}
+	var content, _ = doc.Html()
+	fmt.Println(content)
+	var index = strings.Index(content, "btwaf")
+	if index > 0 {
+		var condiction = content[index+6 : index+14]
+		var newUrl = url + "?btwaf=" + condiction
+		getImgCat(newUrl)
 		return
 	}
 

@@ -12,7 +12,11 @@ func main() {
 	initialize.Mysql()
 	defer global.G_DB.Close()
 	initialize.DBTables()
-	tool.FillCat()
+
+	tool.GetSubID(602)
+	tool.GetSubID(606)
+	tool.GetSubID(603)
+	tool.GetSubID(605)
 	return
 	core.RunServer()
 }
