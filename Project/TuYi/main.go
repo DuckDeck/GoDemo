@@ -23,9 +23,9 @@ var imgPath = "/Users/stan/Desktop/Project/GoDemo/Project/TuYi/Imgs"
 func main() {
 
 	initDB()
-	//getImgMain("http://www.tuyi8.vip/forum-16-", 13)
-	//getImgMain("http://www.tuyi8.vip/forum-16-14.html?btwaf=34109039", -1)
-	getImgCat("http://www.tuyi8.vip/thread-26209-1-1.html")
+	//getImgMain("http://www.tuyi8.vip/forum-351-", 14)
+	getImgMain("http://www.tuyim.vip/forum-14-5.html", -1)
+	//getImgCat("http://www.tuyi8.vip/thread-26573-1-1.html")
 }
 
 func getImgMain(baseUrl string, startIndex int) {
@@ -48,7 +48,14 @@ func getImgMain(baseUrl string, startIndex int) {
 		fmt.Println("解析HTML失败", err)
 		return
 	}
-	fmt.Println(doc.Html())
+	var content, _ = doc.Html()
+	var index = strings.Index(content, "btwaf")
+	if index > 0 {
+		var condiction = content[index+6 : index+14]
+		var newUrl = url + "?btwaf=" + condiction
+		getImgMain(newUrl, -1)
+		return
+	}
 	pages := doc.Find("div.pg").First().Children().Length() + startIndex - 2
 	pages = startIndex + 1
 	fmt.Println("一共有多少页", pages)
@@ -56,6 +63,9 @@ func getImgMain(baseUrl string, startIndex int) {
 	s := doc.Find("div.bus_vtem")
 	s.Each(func(i int, s *goquery.Selection) { //获取节点集合并遍历
 		href, exist := s.Children().First().Attr("href")
+		if !strings.HasPrefix(href, "http") {
+			href = "http://www.tuyim.vip/" + href
+		}
 		if exist {
 			arrCatImgs = append(arrCatImgs, href)
 		}
@@ -149,8 +159,9 @@ func getImg(img string, imgPath string) {
 	}
 	defer res.Body.Close()
 	reader := bufio.NewReaderSize(res.Body, 128*1024)
-
-	file, err := os.Create(filepath.Join(imgPath, fileName))
+	path := filepath.Join(imgPath, fileName)
+	fmt.Println(path)
+	file, err := os.Create(path)
 	if err != nil {
 		panic(err)
 	}
