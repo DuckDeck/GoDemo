@@ -1,8 +1,11 @@
 package main
 
 import (
+	"path/filepath"
 	"fmt"
 	"reflect"
+	
+	
 )
 
 type People interface {
@@ -26,6 +29,16 @@ func reflectType(x interface{}) {
 }
 
 func main() {
+
+
+
+	
+	filepathNames,err := filepath.Glob(filepath.Join("smb://desktop-510cvkc/E/下载","*"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(filepathNames)
+	
 	fmt.Println("hello")
 
 	s3 := []int{1, 2, 3}
