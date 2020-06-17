@@ -24,7 +24,7 @@ func main() {
 
 	initDB()
 	//getImgMain("http://www.tuyi8.vip/forum-351-", 14)
-	getImgMain("http://www.tuyim.vip/forum-14-5.html", -1)
+	getImgMain("http://www.tuyim.vip/forum-31-4.html", -1)
 	//getImgCat("http://www.tuyi8.vip/thread-26573-1-1.html")
 }
 
@@ -195,8 +195,8 @@ func saveToMysql(tu TuYi) {
 
 func initDB() (err error) {
 
-	con := "root:Stanhu520.@tcp(127.0.0.1:3306)/TuYi" //这个要放外面
-	db, err = sql.Open("mysql", con)                  //已经有全局DB了，err也已经有了，不需要声明，这可能有很多坑
+	con := "root:Stanhu520.@tcp(139.186.66.34:3306)/TuYi" //这个要放外面
+	db, err = sql.Open("mysql", con)                      //已经有全局DB了，err也已经有了，不需要声明，这可能有很多坑
 	if err != nil {
 		fmt.Printf("conn %s invalid,err:%v\n", con, err)
 		return

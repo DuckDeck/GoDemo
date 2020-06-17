@@ -24,8 +24,8 @@ func main() {
 	initWebService()
 }
 func initDB() (err error) {
-	con := "root:Stanhu520.@tcp(127.0.0.1:3306)/Five" //这个要放外面
-	db, err = sql.Open("mysql", con)                  //已经有全局DB了，err也已经有了，不需要声明，这可能有很多坑
+	con := "root:Stanhu520.@tcp(139.186.66.34:3306)/Five" //这个要放外面
+	db, err = sql.Open("mysql", con)                      //已经有全局DB了，err也已经有了，不需要声明，这可能有很多坑
 	if err != nil {
 		fmt.Printf("conn %s invalid,err:%v\n", con, err)
 		return
