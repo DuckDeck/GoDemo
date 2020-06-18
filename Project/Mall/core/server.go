@@ -12,7 +12,7 @@ import (
 func RunServer() {
 	Router := initialize.Routers()
 
-	address := fmt.Sprintf(":%d", global.G_CONFIG.System.Addr)
+	address := fmt.Sprintf("0.0.0.0:%d", global.G_CONFIG.System.Addr)
 
 	s := &http.Server{
 		Addr:           address,

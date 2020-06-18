@@ -1,8 +1,8 @@
 mysql:
     username: root
     password: 'Stanhu520.'
-    path: '127.0.0.1:3306'
-    db-name: 'mall'
+    path: '139.186.66.34:3306'
+    db-name: 'test'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10

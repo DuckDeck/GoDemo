@@ -8,12 +8,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-const defaultConfigFile = "Project/Mall/config.yaml"
+const defaultConfigFile = "./../config.yaml"
 
 func init() {
 
 	v := viper.New()
-	v.SetConfigFile(defaultConfigFile)
+	v.AddConfigPath("../")
+	v.SetConfigFile("config.yaml")
 	err := v.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
