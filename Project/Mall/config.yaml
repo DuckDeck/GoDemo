@@ -11,7 +11,7 @@ mysql:
 system:
     use-multipoint: false
     env: 'public'  # Change to "develop" to skip authentication for development mode
-    addr: 8808
+    addr: 9090
     db-type: "mysql"
 log:
     prefix: '[GIN-VUE-ADMIN]'
