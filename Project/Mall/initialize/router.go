@@ -26,7 +26,7 @@ func initMainRouter(Router *gin.RouterGroup) {
 	UserRouter := Router.Group("main")
 	//.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		UserRouter.GET("/", api.Main) // 修改密码
+		UserRouter.GET("/", api.Main)
 	}
 }
 
@@ -34,6 +34,7 @@ func uploadRouter(Router *gin.RouterGroup) {
 	UploadRouter := Router.Group("upload")
 	//.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		UploadRouter.POST("/header", api.Upload) // 修改密码
+		UploadRouter.POST("/header", api.Upload)
+		UploadRouter.POST("/img", api.Upload)
 	}
 }
