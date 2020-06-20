@@ -18,6 +18,7 @@ func Routers() *gin.Engine {
 	ApiGroup := Router.Group("")
 	initMainRouter(ApiGroup)
 	uploadRouter(ApiGroup)
+	fiveRouter(ApiGroup)
 	global.G_LOG.Debug("router register success")
 	return Router
 }
@@ -37,4 +38,8 @@ func uploadRouter(Router *gin.RouterGroup) {
 		UploadRouter.POST("/header", api.Upload)
 		UploadRouter.POST("/img", api.Upload)
 	}
+}
+
+func fiveRouter(Router *gin.RouterGroup) {
+	Router.GET("/five/:key", api.GetFive)
 }

@@ -12,13 +12,13 @@ import (
 func getGoodCats(c *gin.Context) {
 	var cat, yes = c.Params.Get("cat")
 	if !yes {
-		var res = model.Result{Code: 0, Count: 0, Msg: "success", Data: nil}
+		var res = model.Result{Code: 0, Count: 0, Msg: "success", CMsg: "搜索的字必定的汉字", Data: nil}
 		c.JSON(http.StatusOK, res)
 		return
 	}
 	var catID, err = strconv.Atoi(cat)
 	if err != nil {
-		var res = model.Result{Code: 0, Count: 0, Msg: "success", Data: nil}
+		var res = model.Result{Code: 0, Count: 0, Msg: "success", CMsg: "成功", Data: nil}
 		c.JSON(http.StatusOK, res)
 		return
 	}
@@ -27,7 +27,7 @@ func getGoodCats(c *gin.Context) {
 	var tmp, _ = model.GetCats(catID)
 
 	arr = append(arr, tmp...)
-	var res = model.Result{Code: 0, Count: 0, Msg: "success", Data: cat}
+	var res = model.Result{Code: 0, Count: 0, Msg: "success", CMsg: "成功", Data: cat}
 	c.JSON(http.StatusOK, res)
 }
 
