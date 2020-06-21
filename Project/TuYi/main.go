@@ -24,7 +24,7 @@ func main() {
 
 	initDB()
 	//getImgMain("http://www.tuyi8.vip/forum-351-", 14)
-	getImgMain("http://www.tuyim.vip/forum-31-20.html", -1)
+	getImgMain("http://www.tuyim.vip/forum-31-26.html", -1)
 	//getImgCat("http://www.tuyi8.vip/thread-26573-1-1.html")
 }
 
