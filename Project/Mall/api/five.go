@@ -37,7 +37,7 @@ func GetFive(c *gin.Context) {
 	jsStr, _ := json.Marshal(fives)
 	fmt.Printf("json:%s\n", string(jsStr))
 
-	c.JSON(http.StatusOK, model.Result{Code: 0, Count: 0, Msg: "success", CMsg: "成功", Data: string(jsStr)})
+	c.JSON(http.StatusOK, model.Result{Code: 0, Count: 0, Msg: "success", CMsg: "成功", Data: fives})
 }
 
 func checkExist(letters []string) (fives []model.FiveCode, err error) {
