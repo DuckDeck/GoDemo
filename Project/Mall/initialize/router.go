@@ -19,6 +19,7 @@ func Routers() *gin.Engine {
 	initMainRouter(ApiGroup)
 	uploadRouter(ApiGroup)
 	fiveRouter(ApiGroup)
+	mitoRouter(ApiGroup)
 	global.G_LOG.Debug("router register success")
 	return Router
 }
@@ -42,4 +43,8 @@ func uploadRouter(Router *gin.RouterGroup) {
 
 func fiveRouter(Router *gin.RouterGroup) {
 	Router.GET("/five/:key", api.GetFive)
+}
+
+func mitoRouter(Router *gin.RouterGroup) {
+	Router.GET("/mitu/:path/:index", api.SaveMito)
 }
