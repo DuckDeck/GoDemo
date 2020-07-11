@@ -46,5 +46,5 @@ func fiveRouter(Router *gin.RouterGroup) {
 }
 
 func mitoRouter(Router *gin.RouterGroup) {
-	Router.GET("/mitu/:path/:index", api.SaveMito)
+	Router.GET("/mito/:path/:index", api.SaveMito)
 }
