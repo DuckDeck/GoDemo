@@ -1,7 +1,7 @@
 mysql:
-    username: root
-    password: 'Stanhu520.'
-    path: '139.186.66.34:3306'
+    username: test
+    password: 'stanhu520'
+    path: 'localhost:3306'
     db-name: 'test'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
